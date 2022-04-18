@@ -7,6 +7,7 @@ Ceci est un script temporaire.
 '''read a csv file'''
 #import pandas as pd 
 #data = read.csv
+from matplotlib.pyplot import figure
 import matplotlib.pyplot as plt
 import re
 from nltk.corpus import stopwords
@@ -29,13 +30,13 @@ for x in soup.find_all('div', class_='summary'):
 fichier.close()
     
 
-f = open('article.txt')
+f = open('article.txt',encoding="utf8")
 raw = f.readlines()
-tokens = word_tokenize(raw)
-#print(tokens)
+tokens = word_tokenize(str(raw))
+print(tokens)
 
 words = [w.lower() for w in tokens] 
-#print(words)
+print(str(words))
 
 stopWords = set(stopwords.words('english'))
 wordsFiltered = []
@@ -50,27 +51,19 @@ for word,frequence in freq.items():
     print(str(word)+ "  " + str(frequence)+ '' )
     
     
-F=open('article_tokenised.txt', 'w')
+F=open('article_tokenised.txt', 'w',encoding="utf8")
 for word,frequence in freq.items():
     F.write(str(word) + ' ' + str(frequence))
     F.write('\n')
     
 F.close()
 
-terme = str(input('enter your sentence: '))
 #phase de recherche de terme
 def recherche(terme):
-    
-    
     for word,frequence in freq.items():
-        
         if terme in word and frequence:#fonction bouléenne
-            
             print(str(word) +' is in the doc'+ ' ' + str(frequence) + ' ' + 'time(s)')
             return terme
-        
-            
-    
     print('no reference for your word(s)')
     return terme
 
@@ -84,19 +77,20 @@ analyser = SentimentIntensityAnalyzer()
 #score for little sentence
 def sentiment_analyzer_scores(sentence): #here we don't use sentiwordnet
 #we use vaderSentiment lib. --> more powerful than sentiwordnet, it gives the compound 
-    
     score = analyser.polarity_scores(sentence)
-    print("{:-<40} {}".format(sentence, str(score)))
+    print('{:-<40} {}'.format(sentence, str(score)))
 #score for all
 
-txt = open('article.txt',"r")
+txt = open('article.txt',"r",encoding="utf8")
 L = txt.readlines()
 ##cleaning section --> not obligate to do this 
 Split = []
-for lines in L:
-    Split.append(lines.strip())
 REPLACE_NO_SPACE = re.compile("[.;:!\'?,\"()\[\]]")#
 REPLACE_WITH_SPACE = re.compile("(<br\s*/><br\s*/>)|(\-)|(\/)")
+
+for lines in L:
+    Split.append(lines.strip())
+
 
 def preprocess_reviews(reviews):
     reviews = [REPLACE_NO_SPACE.sub(' ', line.lower()) for line in reviews]
@@ -110,7 +104,7 @@ def scores():
         #we create a i-variable who is going to read our file 
         
         
-        a = sentiment_analyzer_scores(L)#using our senti_analyzer
+        a = sentiment_analyzer_scores(str(L))#using our senti_analyzer
         #why we use the L and not the clean_split --> just because sentiment_analyzer_scores
         #use the special caracters for the scores acoording to his polarity
         
@@ -127,31 +121,31 @@ limit_freq_2 = 40
 limit_freq_3 = 45
 for word,frequence in freq.items():
 ###Plotting the results 
+
     if frequence >= limit_freq_0:
-#we use a big limit to filter the most other words
+        #we use a big limit to filter the most common words
         #flter_0
         plt.subplot(1,4,1)
         plt.plot(word, frequence,'*')
         plt.xlabel('word')
         plt.ylabel('frequence')
         plt.title('limit_freq_0')
-    
         print(str((word)) + ' ' + str(frequence))
+        
     if frequence >= limit_freq_1:
     
         plt.subplot(1,4,2)
         plt.plot(word, frequence,'*')
         plt.xlabel('word')
         plt.title('limit_freq_1 ')
-    
         print(str((word)) + ' ' + str(frequence))
+        
     if frequence >= limit_freq_2:
     
         plt.subplot(1,4,3)
         plt.plot(word, frequence,'*')
         plt.xlabel('word')
         plt.title('limit_freq_2 ')
-    
         print(str((word)) + ' ' + str(frequence))
         
     if frequence >= limit_freq_3:
@@ -160,10 +154,30 @@ for word,frequence in freq.items():
         plt.plot(word, frequence,'*')
         plt.xlabel('word')
         plt.title('limit_freq_3')
-    
         print(str((word)) + ' ' + str(frequence))
 
 
+
+
+'''----------------Testing-----------------'''
+if __name__ == "__main__":
+    terme = str(input('enter your sentence: '))
+    recherche(terme)
+    print("--------recherche function test passed !------")
+    
+    sentiment_analyzer_scores("happy")
+    print("-----sentiment_analyzer_scores function test passed !--")
+    
+    scores()
+    print("------function scores() test passed !--")
+    
+    preprocess_reviews("./5°+RRHello ")
+    print("-----preprocess_reviews() function test passed !")
+    
+    print("\n -------All test has passed ! ")
+    
+    
+    
           
 #feelings part 
 #exemple for           
