@@ -2,16 +2,16 @@
 """
 Éditeur de Spyder
 
-Ceci est un script temporaire.
+Scrapping Sentiment Project
 """
-'''read a csv file'''
-#import pandas as pd 
-#data = read.csv
+
 from matplotlib.pyplot import figure
 import matplotlib.pyplot as plt
 import re
 from nltk.corpus import stopwords
 import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
 from lxml import html 
 import requests
 from bs4 import BeautifulSoup
@@ -161,7 +161,7 @@ for word,frequence in freq.items():
 
 '''----------------Testing-----------------'''
 if __name__ == "__main__":
-    terme = str(input('enter your sentence: '))
+    terme = "this is my test sentence"
     recherche(terme)
     print("--------recherche function test passed !------")
     
