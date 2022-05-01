@@ -203,5 +203,3 @@ if __name__ == "__main__":
 
 #class SentiWordNetCorpusReader(CorpusReader):
     #def 
-
-    
